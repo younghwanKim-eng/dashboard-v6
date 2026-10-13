@@ -261,6 +261,10 @@ def render_login():
 
         st.session_state["user"] = user
         st.session_state["login_time"] = login_time
+        # [BUGFIX 2026-10-13] 세션이 흔들려도 복구할 수 있게 백업 키 저장
+        st.session_state["_logged_in"] = True
+        st.session_state["_user_id"] = user["id"]
+        st.session_state["_login_time_iso"] = login_time.isoformat()
         st.rerun()
 
 
@@ -962,10 +966,37 @@ def _requested_mode() -> str:
     return (m or "auto").lower()
 
 
+def _restore_session_if_possible() -> bool:
+    """[BUGFIX 2026-10-13] user 키가 사라졌어도 백업 키로 복구를 시도한다.
+    Streamlit Cloud에서 간혹 rerun 사이에 특정 session_state 키만 유실되는
+    현상이 보고되므로, 로그인 시 심어둔 _logged_in / _user_id / _login_time_iso
+    로부터 user 객체를 다시 조립한다. 복구 성공 시 True."""
+    if "user" in st.session_state and "login_time" in st.session_state:
+        return True
+    if not st.session_state.get("_logged_in"):
+        return False
+    uid = st.session_state.get("_user_id")
+    iso = st.session_state.get("_login_time_iso")
+    if not uid or not iso:
+        return False
+    matched = next((u for u in USERS if u["id"] == uid), None)
+    if matched is None:
+        return False
+    try:
+        lt = datetime.fromisoformat(iso)
+    except Exception:
+        return False
+    st.session_state["user"] = matched
+    st.session_state["login_time"] = lt
+    return True
+
+
 def main():
+    # [BUGFIX 2026-10-13] 세션 복구 우선 시도
     if "user" not in st.session_state:
-        render_login()
-        return
+        if not _restore_session_if_possible():
+            render_login()
+            return
 
     user = st.session_state["user"]
     login_time: datetime = st.session_state["login_time"]

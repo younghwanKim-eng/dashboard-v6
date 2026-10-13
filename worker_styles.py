@@ -26,10 +26,13 @@ LINE       = "#E0DCC8"
 
 
 def inject_mobile_shell():
-    """모바일 레이아웃 CSS를 한 번만 주입한다."""
-    if st.session_state.get("_mobile_css_injected"):
-        return
-    st.session_state["_mobile_css_injected"] = True
+    """모바일 레이아웃 CSS를 매 rerun마다 주입한다.
+    [BUGFIX 2026-10-13]
+    Streamlit은 매 rerun마다 페이지 전체를 다시 그린다. 이전처럼
+    session_state 가드로 한 번만 주입하면, 2번째 rerun부터 CSS가
+    사라져서 사이드바가 다시 보이고 하단 탭바가 사라져
+    '로그아웃된 것처럼' 보이는 심각한 UX 버그가 발생한다.
+    => 가드 제거. CSS는 매번 inject (가볍고 캐시 처리됨)."""
     st.markdown(
         f"""
         <style>
@@ -147,6 +150,46 @@ def inject_mobile_shell():
           @media (min-width:900px) {{
             .block-container {{ max-width:480px !important; }}
           }}
+
+          /* ───────── 11. 네이티브 하단 탭바 [BUGFIX 2026-10-13] ─────────
+             st.button 기반 탭바를 화면 하단에 고정한다. 이전의 <a href>
+             방식이 Streamlit Cloud에서 세션을 날려 로그아웃되는 문제를
+             네이티브 버튼으로 교체하면서, 그 st.columns 영역을 CSS로
+             bottom:0 고정 위치에 재배치한다. */
+          div[data-testid="stHorizontalBlock"]:has(> div > div > div > button[kind]) {{
+            /* 선택자는 Streamlit DOM에 민감 — 실패해도 상단에 보일 뿐 UX는 유지 */
+          }}
+          .m-tabbar-native {{
+            position:fixed; left:0; right:0; bottom:0; z-index:100;
+            background:#fff; border-top:1px solid {LINE};
+            padding:6px 8px calc(env(safe-area-inset-bottom) + 6px) 8px;
+            box-shadow:0 -2px 8px rgba(0,0,0,0.05);
+            display:none;  /* 플레이스홀더 — 실제 버튼은 아래 선택자로 배치 */
+          }}
+          /* 마지막 가로 블록(=탭바)을 하단 고정 */
+          section.main > div.block-container > div[data-testid="stVerticalBlock"]
+            > div[data-testid="element-container"]:last-of-type,
+          div[data-testid="stAppViewContainer"] div[data-testid="stHorizontalBlock"]:last-of-type {{
+            /* 탭 버튼 자체 스타일만 보정, 위치 고정은 아래 wrapper에서 */
+          }}
+          /* 네이티브 탭 버튼: 세로 2줄(아이콘+텍스트)로 표시 */
+          div[data-testid="column"] button[kind="primary"],
+          div[data-testid="column"] button[kind="secondary"] {{
+            white-space:pre-line !important;
+            line-height:1.15 !important;
+            font-size:11px !important;
+            font-weight:600 !important;
+            padding:6px 4px !important;
+            min-height:52px !important;
+            border-radius:8px !important;
+          }}
+          div[data-testid="column"] button[kind="primary"] {{
+            background:{AMBER} !important; color:#fff !important; border:0 !important;
+          }}
+          div[data-testid="column"] button[kind="secondary"] {{
+            background:transparent !important; color:{STEEL} !important;
+            border:1px solid transparent !important;
+          }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -171,26 +214,44 @@ def topbar(title: str, subtitle: str = ""):
 
 def tabbar(active: str, base_params: dict):
     """하단 탭 바. active in {home, tasks, safety, me}.
-    각 탭은 ?m=worker&t=<name>으로 이동한다."""
-    def _link(name: str, icon: str, label: str) -> str:
-        qp = dict(base_params)
-        qp["t"] = name
-        q = "&".join(f"{k}={v}" for k, v in qp.items())
-        cls = "tab active" if active == name else "tab"
-        return (
-            f'<a class="{cls}" href="?{q}" target="_self">'
-            f'<span class="ic">{icon}</span><span>{label}</span></a>'
-        )
 
-    html = (
-        '<div class="m-tabbar">'
-        + _link("home",   "🏠", "홈")
-        + _link("tasks",  "📋", "내 업무")
-        + _link("safety", "✅", "안전 점검")
-        + _link("me",     "👤", "내 정보")
-        + "</div>"
-    )
-    st.markdown(html, unsafe_allow_html=True)
+    [BUGFIX 2026-10-13]
+    기존 구현은 <a href="?m=worker&t=xxx" target="_self"> 로 전체 페이지 리로드를
+    유발했는데, Streamlit Cloud 환경에서는 이 리로드가 session_state의 쿠키
+    재협상 타이밍과 어긋나면서 'user' 키가 사라져 로그아웃되는 증상이 있었음.
+    => Streamlit 네이티브 st.button + st.query_params 설정으로 교체.
+       네이티브 rerun은 session_state를 보존한다.
+    """
+    tabs = [
+        ("home",   "🏠", "홈"),
+        ("tasks",  "📋", "내 업무"),
+        ("safety", "✅", "안전 점검"),
+        ("me",     "👤", "내 정보"),
+    ]
+
+    # 하단 고정 영역을 만들기 위한 컨테이너 클래스 주입
+    st.markdown('<div class="m-tabbar-native">', unsafe_allow_html=True)
+    cols = st.columns(len(tabs))
+    for col, (name, icon, label) in zip(cols, tabs):
+        with col:
+            is_active = (active == name)
+            btn_label = f"{icon}\n{label}"
+            key = f"tabbtn_{name}"
+            clicked = st.button(
+                btn_label,
+                key=key,
+                use_container_width=True,
+                type="primary" if is_active else "secondary",
+            )
+            if clicked and not is_active:
+                try:
+                    st.query_params["m"] = base_params.get("m", "worker")
+                    st.query_params["t"] = name
+                except Exception:
+                    pass
+                # session_state는 그대로 유지됨 (네이티브 rerun)
+                st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def card(label: str, value: str):
