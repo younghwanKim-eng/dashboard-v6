@@ -1,0 +1,222 @@
+[
+  {
+    "id": "T-20261013-001",
+    "worker_id": "sokcho01",
+    "title": "속초현장 A동 북측 크레인 양중 작업",
+    "site": "속초현장 A동",
+    "location": "A동 북측 자재야적장",
+    "equipment": "이동식 크레인",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "08:00",
+    "scheduled_end": "12:00",
+    "supervisor": "김현장",
+    "supervisor_phone": "010-1234-5678",
+    "work_items": [
+      "H형강 자재 양중 (12m, 1.2t × 6본)",
+      "아웃트리거 4지점 접지 및 받침판 확인",
+      "크레인 지반 수평 ±1° 이내 유지"
+    ],
+    "safety_notes": "풍속 10m/s 이상 시 즉시 작업 중지 보고. 신호수 1명 상주 필수.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+  {
+    "id": "T-20261013-002",
+    "worker_id": "sokcho01",
+    "title": "속초현장 B동 자재 하역 보조",
+    "site": "속초현장 B동",
+    "location": "B동 입구 하역장",
+    "equipment": "이동식 크레인",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "13:00",
+    "scheduled_end": "16:00",
+    "supervisor": "김현장",
+    "supervisor_phone": "010-1234-5678",
+    "work_items": [
+      "거푸집 자재 하역 (팔레트 8개)",
+      "하역 후 자재 결속 상태 확인"
+    ],
+    "safety_notes": "오후 돌풍 주의. 하역 순서는 안전관리자 지시에 따를 것.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-010",
+    "worker_id": "seoul01",
+    "title": "서울현장 지하 1층 터파기 보조",
+    "site": "서울현장",
+    "location": "지하 1층 북측 구간",
+    "equipment": "굴착기",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "08:00",
+    "scheduled_end": "11:30",
+    "supervisor": "이안전",
+    "supervisor_phone": "010-2345-6789",
+    "work_items": [
+      "토사 반출 (약 25m³)",
+      "굴착면 경사 1:0.5 유지 확인"
+    ],
+    "safety_notes": "지반 기울기 3° 초과 시 작업 중지, 안전관리자에 즉시 보고.",
+    "status": "in_progress",
+    "history": [
+      {"at": "2026-10-13 06:30:00", "to": "pending"},
+      {"at": "2026-10-13 08:05:00", "to": "in_progress"}
+    ]
+  },
+  {
+    "id": "T-20261013-011",
+    "worker_id": "seoul01",
+    "title": "서울현장 가설도로 정비",
+    "site": "서울현장",
+    "location": "가설도로 입구~중앙",
+    "equipment": "굴착기",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "13:00",
+    "scheduled_end": "17:00",
+    "supervisor": "이안전",
+    "supervisor_phone": "010-2345-6789",
+    "work_items": [
+      "노면 요철 평탄화",
+      "배수로 정비 및 자갈 포설"
+    ],
+    "safety_notes": "타 차량 통행 가능 — 신호수 반드시 배치.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-020",
+    "worker_id": "daejeon01",
+    "title": "대전물류 창고 자재 적치",
+    "site": "대전물류센터",
+    "location": "A창고 2열",
+    "equipment": "지게차",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "09:00",
+    "scheduled_end": "15:00",
+    "supervisor": "박관리",
+    "supervisor_phone": "010-3456-7890",
+    "work_items": [
+      "입고 팔레트 적치 (24개)",
+      "출고 분리 작업 (8개)"
+    ],
+    "safety_notes": "포크 상승 시 보행자 통제. 적재 하중 2t 준수.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-030",
+    "worker_id": "daegu01",
+    "title": "대구 아파트현장 콘크리트 타설",
+    "site": "대구아파트현장",
+    "location": "3동 지하주차장",
+    "equipment": "레미콘",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "08:30",
+    "scheduled_end": "14:30",
+    "supervisor": "최기사",
+    "supervisor_phone": "010-4567-8901",
+    "work_items": [
+      "레미콘 15m³ 타설",
+      "거푸집 수밀 상태 확인 후 투입"
+    ],
+    "safety_notes": "주입구 주변 보행자 통제. 지반 침하 수시 확인.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-040",
+    "worker_id": "gwangju01",
+    "title": "광주현장 콘크리트 압송",
+    "site": "광주현장",
+    "location": "5동 옥상",
+    "equipment": "펌프카",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "09:00",
+    "scheduled_end": "13:00",
+    "supervisor": "정반장",
+    "supervisor_phone": "010-5678-9012",
+    "work_items": [
+      "옥상 슬라브 콘크리트 압송 (약 18m³)",
+      "붐 각도 작업 매뉴얼 준수"
+    ],
+    "safety_notes": "아웃트리거 완전 전개 확인. 풍속 10m/s 이상 즉시 중단.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-050",
+    "worker_id": "taebaek01",
+    "title": "태백현장 토사 반출",
+    "site": "태백현장",
+    "location": "A구역 → 반출장",
+    "equipment": "덤프트럭",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "08:00",
+    "scheduled_end": "16:00",
+    "supervisor": "홍작업",
+    "supervisor_phone": "010-6789-0123",
+    "work_items": [
+      "토사 반출 왕복 (6회 예정)",
+      "덤프 하역 시 지반 경사 2° 이내 확인"
+    ],
+    "safety_notes": "진입로 급경사 — 저속 운행 필수. 적재함 적재 균형 확인.",
+    "status": "paused",
+    "history": [
+      {"at": "2026-10-13 06:30:00", "to": "pending"},
+      {"at": "2026-10-13 08:10:00", "to": "in_progress"},
+      {"at": "2026-10-13 10:20:00", "to": "paused"}
+    ]
+  },
+
+  {
+    "id": "T-20261013-060",
+    "worker_id": "seoul02",
+    "title": "서울현장 외벽 도장 지원",
+    "site": "서울현장",
+    "location": "2동 외벽 7~9층",
+    "equipment": "스카이(고소작업차)",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "08:30",
+    "scheduled_end": "12:00",
+    "supervisor": "조소장",
+    "supervisor_phone": "010-7890-1234",
+    "work_items": [
+      "7~9층 외벽 도장 보조",
+      "고소작업차 아웃트리거 접지 확인"
+    ],
+    "safety_notes": "고소작업차 풍속 한계 10m/s. 안전대 2점 체결 상시.",
+    "status": "pending",
+    "history": [{"at": "2026-10-13 06:30:00", "to": "pending"}]
+  },
+
+  {
+    "id": "T-20261013-070",
+    "worker_id": "daegu02",
+    "title": "대구물류 윙바디 적재/운송",
+    "site": "대구물류센터",
+    "location": "B출하장 → 거점",
+    "equipment": "카고트럭(윙바디)",
+    "scheduled_date": "2026-10-13",
+    "scheduled_start": "09:30",
+    "scheduled_end": "15:30",
+    "supervisor": "강운전",
+    "supervisor_phone": "010-8901-2345",
+    "work_items": [
+      "윙바디 개방 및 적재 (팔레트 18)",
+      "적재 결속 2단 체결"
+    ],
+    "safety_notes": "윙 개방 반경 내 보행자 통제. 결속 미비 상태 운행 금지.",
+    "status": "done",
+    "history": [
+      {"at": "2026-10-13 06:30:00", "to": "pending"},
+      {"at": "2026-10-13 09:40:00", "to": "in_progress"},
+      {"at": "2026-10-13 14:20:00", "to": "review_requested"},
+      {"at": "2026-10-13 14:45:00", "to": "done"}
+    ]
+  }
+]
